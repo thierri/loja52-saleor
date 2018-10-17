@@ -89,6 +89,8 @@ def test_query_user(staff_api_client, customer_user, permission_manage_users):
     query User($id: ID!) {
         user(id: $id) {
             email
+            firstName
+            lastName
             isStaff
             isActive
             addresses {
@@ -124,6 +126,8 @@ def test_query_user(staff_api_client, customer_user, permission_manage_users):
     content = get_graphql_content(response)
     data = content['data']['user']
     assert data['email'] == user.email
+    assert data['firstName'] == user.first_name
+    assert data['lastName'] == user.last_name
     assert data['isStaff'] == user.is_staff
     assert data['isActive'] == user.is_active
     assert data['addresses']['totalCount'] == user.addresses.count()
@@ -276,10 +280,13 @@ def test_customer_create(
         permission_manage_users):
     query = """
     mutation CreateCustomer(
-        $email: String, $note: String, $billing: AddressInput,
-        $shipping: AddressInput, $send_mail: Boolean) {
+        $email: String, $firstName: String, $lastName: String,
+        $note: String, $billing: AddressInput, $shipping: AddressInput,
+        $send_mail: Boolean) {
         customerCreate(input: {
             email: $email,
+            firstName: $firstName,
+            lastName: $lastName,
             note: $note,
             defaultShippingAddress: $shipping,
             defaultBillingAddress: $billing
@@ -298,6 +305,8 @@ def test_customer_create(
                     id
                 }
                 email
+                firstName
+                lastName
                 isActive
                 isStaff
                 note
@@ -306,11 +315,15 @@ def test_customer_create(
     }
     """
     email = 'api_user@example.com'
+    first_name = "api_first_name"
+    last_name = "api_last_name"
     note = 'Test user'
     address_data = convert_dict_keys_to_camel_case(address.as_data())
 
     variables = {
         'email': email,
+        'firstName': first_name,
+        'lastName': last_name,
         'note': note,
         'shipping': address_data,
         'billing': address_data,
@@ -330,6 +343,8 @@ def test_customer_create(
     data = content['data']['customerCreate']
     assert data['errors'] == []
     assert data['user']['email'] == email
+    assert data['user']['firstName'] == first_name
+    assert data['user']['lastName'] == last_name
     assert data['user']['note'] == note
     assert data['user']['isStaff'] == False
     assert data['user']['isActive'] == True
@@ -346,8 +361,12 @@ def test_customer_update(
         staff_api_client, customer_user, user_api_client, address,
         permission_manage_users):
     query = """
-    mutation UpdateCustomer($id: ID!, $note: String, $billing: AddressInput, $shipping: AddressInput) {
+    mutation UpdateCustomer(
+        $id: ID!, $firstName: String, $lastName: String, $note: String,
+        $billing: AddressInput, $shipping: AddressInput) {
         customerUpdate(id: $id, input: {
+            firstName: $firstName,
+            lastName: $lastName,
             note: $note,
             defaultBillingAddress: $billing
             defaultShippingAddress: $shipping
@@ -358,6 +377,8 @@ def test_customer_update(
             }
             user {
                 id
+                firstName
+                lastName
                 note
                 defaultBillingAddress {
                     id
@@ -378,6 +399,8 @@ def test_customer_update(
     shipping_address_pk = customer_user.default_shipping_address.pk
 
     id = graphene.Node.to_global_id('User', customer_user.id)
+    first_name = 'new_first_name'
+    last_name = 'new_last_name'
     note = 'Test update note'
     address_data = convert_dict_keys_to_camel_case(address.as_data())
 
@@ -386,6 +409,8 @@ def test_customer_update(
 
     variables = {
         'id': id,
+        'firstName': first_name,
+        'lastName': last_name,
         'note': note,
         'billing': address_data,
         'shipping': address_data}
@@ -405,6 +430,8 @@ def test_customer_update(
 
     data = content['data']['customerUpdate']
     assert data['errors'] == []
+    assert data['user']['firstName'] == first_name
+    assert data['user']['lastName'] == last_name
     assert data['user']['note'] == note
 
 
