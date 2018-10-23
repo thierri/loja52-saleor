@@ -365,6 +365,8 @@ type CustomerCreate {
 }
 
 input CustomerInput {
+  firstName: String
+  lastName: String
   email: String
   note: String
   defaultBillingAddress: AddressInput
@@ -1591,6 +1593,8 @@ type StaffCreate {
 }
 
 input StaffCreateInput {
+  firstName: String
+  lastName: String
   email: String
   note: String
   isActive: Boolean
@@ -1604,6 +1608,8 @@ type StaffDelete {
 }
 
 input StaffInput {
+  firstName: String
+  lastName: String
   email: String
   note: String
   isActive: Boolean
@@ -1666,6 +1672,8 @@ scalar Upload
 type User implements Node {
   id: ID!
   email: String!
+  firstName: String!
+  lastName: String!
   addresses(before: String, after: String, first: Int, last: Int): AddressCountableConnection
   isStaff: Boolean!
   token: UUID!
@@ -1689,6 +1697,8 @@ type UserCountableEdge {
 }
 
 input UserCreateInput {
+  firstName: String
+  lastName: String
   email: String
   note: String
   defaultBillingAddress: AddressInput
