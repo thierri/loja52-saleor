@@ -14,6 +14,8 @@ class DummyPaymentForm(PaymentForm):
     credit_card_number = forms.CharField(
         label=pgettext_lazy('Payment status form field', 'Credit Card Number')
     )
+    # Overwrite the template for getting a new one. Inputs without name.
+    credit_card_number.widget.template_name = 'django/forms/widgets/input_js_only.html'
 
 
     def process_payment(self):
