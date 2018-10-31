@@ -29,6 +29,7 @@ dist/
 /media/
 /node_modules/
 /static/
+/venv
 /saleor/static/assets/
 webpack-bundle.json
 /templates/templated_email/compiled/*

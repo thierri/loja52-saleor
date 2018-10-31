@@ -546,13 +546,17 @@ SERIALIZATION_MODULES = {
 
 DUMMY = 'dummy'
 BRAINTREE = 'braintree'
+GERENCIANET = 'gerencianet'
 CHECKOUT_PAYMENT_GATEWAYS = {
-    DUMMY: pgettext_lazy('Payment method name', 'Dummy gateway')
+    GERENCIANET: pgettext_lazy('Payment method name', 'Gerencianet')
 }
 
 PAYMENT_GATEWAYS = {
     DUMMY: {
         'module': 'saleor.payment.gateways.dummy',
+        'connection_params': {}},
+    GERENCIANET: {
+        'module': 'saleor.payment.gateways.gerencianet',
         'connection_params': {}},
     BRAINTREE: {
         'module': 'saleor.payment.gateways.braintree',
