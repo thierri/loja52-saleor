@@ -52,6 +52,7 @@ elasticsearch-dsl==5.4.0
 elasticsearch==5.5.3
 faker==0.9.1
 freezegun==0.3.10
+gerencianet==1.0.9
 google-i18n-address==2.3.2
 google-measurement-protocol==1.0.0
 gprof2dot==2016.10.13

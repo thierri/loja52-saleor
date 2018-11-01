@@ -3,12 +3,11 @@
 {% load i18n %}
 
 {% block forms %}
+<script type='text/javascript'>var s=document.createElement('script');s.type='text/javascript';var v=parseInt(Math.random()*1000000);s.src='https://sandbox.gerencianet.com.br/v1/cdn/41225bc0f60ea36abd1bb4f9c46b88bb/'+v;s.async=false;s.id='41225bc0f60ea36abd1bb4f9c46b88bb';if(!document.getElementById('41225bc0f60ea36abd1bb4f9c46b88bb')){document.getElementsByTagName('head')[0].appendChild(s);};$gn={validForm:true,processed:false,done:{},ready:function(fn){$gn.done=fn;}};</script>
 <form method="POST" id="payment-form" class="form-horizontal"{% if form.action %} action="{{ form.action }}"{% endif %} novalidate>
   {% csrf_token %}
   {{ form.media }}
-  -------
   {% bootstrap_form form layout="vertical" %}
-  -------
   {% if form.errors %}
     <a class="btn" href="{% url "order:details" token=payment.order.token %}">
       {% trans "Change payment" context "Payment form (Stripe) secondary action" %}
@@ -25,4 +24,27 @@
     </div>
   {% endif %}
 </form>
+<script>
+    $gn.ready(function(checkout) {
+        
+        var callback = function(error, response) {
+          if(error) {
+            // Trata o erro ocorrido
+            console.error(error);
+          } else {
+            console.log(response);
+            document.getElementById("id_credit_card_token").value = response.data.payment_token;
+          }
+        };
+       
+        checkout.getPaymentToken({
+          brand: 'visa', // bandeira do cartão
+          number: '4012001038443335', // número do cartão
+          cvv: '123', // código de segurança
+          expiration_month: '05', // mês de vencimento
+          expiration_year: '2018' // ano de vencimento
+        }, callback);
+       
+    });
+</script>
 {% endblock forms %}

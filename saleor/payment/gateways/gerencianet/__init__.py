@@ -8,7 +8,9 @@ from prices import Money
 from ... import TransactionKind
 from ...models import Payment
 from ...utils import create_transaction
-from .forms import DummyPaymentForm
+from .forms import CreditCardPaymentForm
+
+from gerencianet import Gerencianet
 
 
 def dummy_success():
@@ -20,7 +22,7 @@ def get_client_token(**connection_params):
 
 
 def get_form_class():
-    return DummyPaymentForm
+    return CreditCardPaymentForm
 
 
 def authorize(payment: Payment, payment_token: str, **connection_params):
