@@ -16,9 +16,24 @@ from gerencianet import Gerencianet
 def dummy_success():
     return True
 
+def get_charge_id(order_lines, **connection_params):
+    request_content = {
+        'items': []
+    }
+    for product_line in order_lines:
+        product_obj = {
+            'name': product_line.product_name,
+            # 'value': product_line.unit_price_gross.amount,
+            'value': 10000,
+            'amount': product_line.quantity
+        }
+        request_content['items'].append(product_obj)
 
-def get_client_token(**connection_params):
-    return str(uuid.uuid4())
+    gn = Gerencianet(connection_params)
+    return gn.create_charge(body=request_content)
+
+def get_client_token(**connection_params):   
+    pass
 
 
 def get_form_class():

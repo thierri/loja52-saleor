@@ -557,7 +557,11 @@ PAYMENT_GATEWAYS = {
         'connection_params': {}},
     GERENCIANET: {
         'module': 'saleor.payment.gateways.gerencianet',
-        'connection_params': {}},
+        'connection_params': {
+            'sandbox_mode': True,
+            'client_id': 'Client_Id_4030802224cac1279527714e0ad1be61761bfa61',
+            'client_secret': 'Client_Secret_eb7880208984307c537a8ae4069fc672e4323561',
+        }},
     BRAINTREE: {
         'module': 'saleor.payment.gateways.braintree',
         'connection_params': {

@@ -36,18 +36,10 @@ class CreditCardPaymentForm(PaymentForm):
 
     def process_payment(self):
         # Dummy provider requires no real token
-        fake_token = self.gateway.get_client_token(**self.gateway_params)
-
-         
-        body = {
-            'items': [],
-            'shippings': []
-        }
-        for product_line in self.payment.order.lines.all():
-            product_obj = {
-                'name': product_line.product_name
-            }
-            body['items'].append(product_obj)
+        order_lines = self.payment.order.lines.all()
+        fake_token = self.gateway.get_charge_id(order_lines, **self.gateway_params)
+        # fake_token = 'oi'
+      
         self.payment.authorize(fake_token)
         charge_status = self.cleaned_data['charge_status']
         if charge_status == ChargeStatus.NOT_CHARGED:
