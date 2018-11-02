@@ -2,6 +2,7 @@ from django import forms
 from django.utils.translation import pgettext_lazy
 from ... import ChargeStatus
 from ...forms import PaymentForm
+from .gncharge import GNCharge
 
 # Override Template Name to a custon one, without 'Name' param
 class JSOnlyCharField(forms.CharField):
@@ -36,6 +37,8 @@ class CreditCardPaymentForm(PaymentForm):
 
     def process_payment(self):
         # Dummy provider requires no real token
+        teste = GNCharge(self.payment.order, **self.gateway_params).get_cleaned_products()
+
         order_lines = self.payment.order.lines.all()
         fake_token = self.gateway.get_charge_id(order_lines, **self.gateway_params)
         # fake_token = 'oi'
