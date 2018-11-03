@@ -38,12 +38,6 @@ class CreditCardPaymentForm(PaymentForm):
     def process_payment(self):
         
         self.payment.authorize(self.cleaned_data['credit_card_token'])
-        self.payment.capture()
-
-        # charge_status = self.cleaned_data['charge_status']
-        # if charge_status == ChargeStatus.NOT_CHARGED:
-        #     return
-        
-        # if charge_status == ChargeStatus.FULLY_REFUNDED:
-        #     self.payment.refund()
+        capture = self.payment.capture()
+    
         return self.payment

@@ -1,4 +1,5 @@
 from gerencianet import Gerencianet
+import re
 
 class GNCharge():
     def __init__(self, order, **connection_params):
@@ -7,11 +8,15 @@ class GNCharge():
 
     @property
     def cleaned_billing_address(self):
+        cep = re.sub("\D", "", self.order.billing_address.postal_code)
+
+        if len(cep) != 8:
+            raise InvalidZipcode
         return {
             'street': self.order.billing_address.street_address_1,
             'number': '123A',
             'neighborhood': 'Freguesia do O',
-            'zipcode': self.order.billing_address.postal_code,
+            'zipcode': cep,
             'city': self.order.billing_address.city,
             'state': self.order.billing_address.country_area
         }
@@ -77,8 +82,6 @@ class GNCharge():
 
         returned_data = gn.pay_charge(params=params, body=body)
 
-        if returned_data['code'] != 200:
-            raise GerencianetBadReturn
         return  returned_data
 
     def create_charge(self):
@@ -94,6 +97,4 @@ class GNCharge():
 
         returned_data = gn.create_charge(body=request_content)
 
-        if returned_data['code'] != 200:
-            raise GerencianetBadReturn
         return  returned_data

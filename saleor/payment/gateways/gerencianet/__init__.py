@@ -25,12 +25,16 @@ def get_form_class():
 
 
 def authorize(payment: Payment, gerencianet_data: str, **connection_params):
+    # Generate the Charge ID with all products, shipping and values.
+
     _GNCharge = GNCharge(payment.order, **connection_params)
     error = None
 
     try:
         gn_response = _GNCharge.create_charge()
-    except expression as identifier:
+        if gn_response['code'] != 200:
+            raise GerencianetBadReturn
+    except:
         error = 'Unable to create charge on Gerencianet'
         
     txn = create_transaction(
@@ -61,6 +65,7 @@ def void(payment: Payment, **connection_params: Dict):
 
 
 def capture(payment: Payment, amount: Decimal, **connection_params):
+    # Pay the last generated Charge ID
     _GNCharge = GNCharge(payment.order, **connection_params)
     error = None
 
@@ -73,16 +78,19 @@ def capture(payment: Payment, amount: Decimal, **connection_params):
     }
     try:
         gn_response = _GNCharge.pay_charge(**payment_data)
-    except expression as identifier:
-        error = 'Unable to create charge on Gerencianet'
+        if gn_response['code'] != 200:
+            raise GerencianetBadReturn
+    except:
+        error = 'Unable to pay charge on Gerencianet'
 
     txn = create_transaction(
         payment=payment,
         kind=TransactionKind.CAPTURE,
         amount=amount,
         currency=payment.currency,
-        token=str(uuid.uuid4()),
-        is_success=success)
+        gateway_response=gn_response,
+        token=payment_data,
+        is_success=(error is None))
     return txn, error
 
 
