@@ -37,10 +37,10 @@ class CreditCardPaymentForm(PaymentForm):
 
     def process_payment(self):
         # Dummy provider requires no real token
-        teste = GNCharge(self.payment.order, **self.gateway_params).get_cleaned_products()
+        teste = GNCharge(self.payment.order, **self.gateway_params).create_and_get_id()
 
-        order_lines = self.payment.order.lines.all()
-        fake_token = self.gateway.get_charge_id(order_lines, **self.gateway_params)
+        # order_lines = self.payment.order.lines.all()
+        # fake_token = self.gateway.get_charge_id(order_lines, **self.gateway_params)
         # fake_token = 'oi'
       
         self.payment.authorize(fake_token)
