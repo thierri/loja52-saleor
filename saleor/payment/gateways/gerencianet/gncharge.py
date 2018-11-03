@@ -6,6 +6,29 @@ class GNCharge():
         self.connection_params = connection_params
 
     @property
+    def cleaned_billing_address(self):
+        return {
+            'street': self.order.billing_address.street_address_1,
+            'number': '123A',
+            'neighborhood': 'Freguesia do O',
+            'zipcode': self.order.billing_address.postal_code,
+            'city': self.order.billing_address.city,
+            'state': self.order.billing_address.country_area
+        }
+    
+    @property
+    def cleaned_customer(self):
+        # FIXME 
+        # CPF HARDCODE???
+        return {
+            'name': self.order.billing_address.full_name,
+            'cpf': '22790142890',
+            'email': self.order.user_email,
+            'phone_number': '11988044463',
+            'birth': '2000-01-01'            
+        }
+    
+    @property
     def cleaned_shippings(self):
         cleaned_shippings = []
         if self.order.shipping_method_name is not None:
@@ -35,7 +58,30 @@ class GNCharge():
         return cleaned_products
 
 
-    def create_and_get_id(self):
+    def pay_charge(self, **payment_data):
+        params = {
+            'id': payment_data['charge_id']
+        }
+
+        body = {
+            'payment': {
+                'credit_card': {
+                    'installments': 1,
+                    'payment_token': payment_data['card_token'],
+                    'billing_address': self.cleaned_billing_address,
+                    'customer': self.cleaned_customer
+                }
+            }
+        }
+        gn = Gerencianet(self.connection_params)
+
+        returned_data = gn.pay_charge(params=params, body=body)
+
+        if returned_data['code'] != 200:
+            raise GerencianetBadReturn
+        return  returned_data
+
+    def create_charge(self):
         if len(self.cleaned_products) == 0:
             raise EmptyProducts
 
@@ -50,4 +96,4 @@ class GNCharge():
 
         if returned_data['code'] != 200:
             raise GerencianetBadReturn
-        return  returned_data['data']['charge_id']
+        return  returned_data

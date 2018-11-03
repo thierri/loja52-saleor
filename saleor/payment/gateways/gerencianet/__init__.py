@@ -9,43 +9,38 @@ from ... import TransactionKind
 from ...models import Payment
 from ...utils import create_transaction
 from .forms import CreditCardPaymentForm
-
+from .gncharge import GNCharge
 from gerencianet import Gerencianet
 
 
 def dummy_success():
     return True
 
-def get_charge_id(order_lines, **connection_params):
-    request_content = {
-        'items': []
-    }
-        
-
-    gn = Gerencianet(connection_params)
-    return gn.create_charge(body=request_content)
-
 def get_client_token(**connection_params):   
-    pass
+    return str(uuid.uuid4())
 
 
 def get_form_class():
     return CreditCardPaymentForm
 
 
-def authorize(payment: Payment, payment_token: str, **connection_params):
-    success = dummy_success()
+def authorize(payment: Payment, gerencianet_data: str, **connection_params):
+    _GNCharge = GNCharge(payment.order, **connection_params)
     error = None
-    if not success:
-        error = 'Unable to authorize transaction'
+
+    try:
+        gn_response = _GNCharge.create_charge()
+    except expression as identifier:
+        error = 'Unable to create charge on Gerencianet'
+        
     txn = create_transaction(
         payment=payment,
         kind=TransactionKind.AUTH,
         amount=payment.total,
         currency=payment.currency,
-        gateway_response={},
-        token=payment_token,
-        is_success=success)
+        gateway_response=gn_response,
+        token=gerencianet_data,
+        is_success=(error is None))
     return txn, error
 
 
@@ -65,11 +60,22 @@ def void(payment: Payment, **connection_params: Dict):
     return txn, error
 
 
-def capture(payment: Payment, amount: Decimal):
+def capture(payment: Payment, amount: Decimal, **connection_params):
+    _GNCharge = GNCharge(payment.order, **connection_params)
     error = None
-    success = dummy_success()
-    if not success:
-        error = 'Unable to process capture'
+
+    auth_transaction = payment.transactions.filter(
+        kind=TransactionKind.AUTH, is_success=True).first()
+
+    payment_data = {
+        'charge_id': auth_transaction.gateway_response['data']['charge_id'],
+        'card_token': auth_transaction.token
+    }
+    try:
+        gn_response = _GNCharge.pay_charge(**payment_data)
+    except expression as identifier:
+        error = 'Unable to create charge on Gerencianet'
+
     txn = create_transaction(
         payment=payment,
         kind=TransactionKind.CAPTURE,

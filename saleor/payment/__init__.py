@@ -65,7 +65,11 @@ class ChargeStatus:
     - Not charged: No funds were take off the customer founding source yet.
     - Fully refunded: All charged funds were returned to the customer.
     """
+    # Customized to Gerencianet Statuses
     CHARGED = 'charged'
+    WAITING = 'waiting'
+    PAID = 'paid'
+    UNPAID = 'unpaid'
     NOT_CHARGED = 'not-charged'
     FULLY_REFUNDED = 'fully-refunded'
     # FIXME
@@ -74,7 +78,10 @@ class ChargeStatus:
     # fully charged
     # ...?
     CHOICES = [
-        (CHARGED, pgettext_lazy('payment status', 'Charged')),
+        (CHARGED, pgettext_lazy('payment status', 'CHARGED')),
+        (WAITING, pgettext_lazy('payment status', 'Waiting Confirmation')),
+        (PAID, pgettext_lazy('payment status', 'Paid')),
+        (UNPAID, pgettext_lazy('payment status', 'Unpaid')),
         (NOT_CHARGED, pgettext_lazy('payment status', 'Not charged')),
         (FULLY_REFUNDED, pgettext_lazy('payment status', 'Fully refunded'))]
 

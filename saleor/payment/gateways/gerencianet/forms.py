@@ -36,18 +36,14 @@ class CreditCardPaymentForm(PaymentForm):
 
 
     def process_payment(self):
-        # Dummy provider requires no real token
-        teste = GNCharge(self.payment.order, **self.gateway_params).create_and_get_id()
-
-        # order_lines = self.payment.order.lines.all()
-        # fake_token = self.gateway.get_charge_id(order_lines, **self.gateway_params)
-        # fake_token = 'oi'
-      
-        self.payment.authorize(fake_token)
-        charge_status = self.cleaned_data['charge_status']
-        if charge_status == ChargeStatus.NOT_CHARGED:
-            return
+        
+        self.payment.authorize(self.cleaned_data['credit_card_token'])
         self.payment.capture()
-        if charge_status == ChargeStatus.FULLY_REFUNDED:
-            self.payment.refund()
+
+        # charge_status = self.cleaned_data['charge_status']
+        # if charge_status == ChargeStatus.NOT_CHARGED:
+        #     return
+        
+        # if charge_status == ChargeStatus.FULLY_REFUNDED:
+        #     self.payment.refund()
         return self.payment
