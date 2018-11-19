@@ -23,7 +23,7 @@ import { appMountPoint } from ".";
 import * as saleorLogo from "../images/logo.svg";
 import { UserContext } from "./auth";
 import { User } from "./auth/types/User";
-import { categoryListUrl } from "./categories";
+import { categoryListUrl } from "./categories/urls";
 import { collectionListUrl } from "./collections/urls";
 import MenuToggle from "./components/MenuToggle";
 import Navigator from "./components/Navigator";
@@ -36,7 +36,8 @@ import Home from "./icons/Home";
 import Shop from "./icons/Shop";
 import Truck from "./icons/Truck";
 import { removeDoubleSlashes } from "./misc";
-import { productListUrl } from "./products";
+import { orderListUrl } from "./orders/urls";
+import { productListUrl } from "./products/urls";
 import { PermissionEnum } from "./types/globalTypes";
 
 const drawerWidth = 256;
@@ -56,7 +57,7 @@ const menuStructure: IMenuItem[] = [
         ariaLabel: "products",
         icon: <Shop />,
         label: i18n.t("Products", { context: "Menu label" }),
-        url: productListUrl
+        url: productListUrl()
       },
       {
         ariaLabel: "categories",
@@ -80,7 +81,7 @@ const menuStructure: IMenuItem[] = [
     icon: <Truck />,
     label: i18n.t("Orders", { context: "Menu label" }),
     permission: PermissionEnum.MANAGE_ORDERS,
-    url: "/orders/"
+    url: orderListUrl()
   },
   {
     ariaLabel: "customers",

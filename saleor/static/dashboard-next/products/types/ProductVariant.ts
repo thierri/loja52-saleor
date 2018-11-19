@@ -29,8 +29,8 @@ export interface ProductVariant_attributes_value {
 
 export interface ProductVariant_attributes {
   __typename: "SelectedAttribute";
-  attribute: ProductVariant_attributes_attribute | null;
-  value: ProductVariant_attributes_value | null;
+  attribute: ProductVariant_attributes_attribute;
+  value: ProductVariant_attributes_value;
 }
 
 export interface ProductVariant_costPrice {
@@ -125,7 +125,7 @@ export interface ProductVariant_product {
 export interface ProductVariant {
   __typename: "ProductVariant";
   id: string;
-  attributes: (ProductVariant_attributes | null)[] | null;
+  attributes: ProductVariant_attributes[];
   costPrice: ProductVariant_costPrice | null;
   images: ProductVariant_images | null;
   name: string;

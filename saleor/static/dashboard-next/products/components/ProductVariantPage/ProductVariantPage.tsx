@@ -1,13 +1,6 @@
 import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 
-import {
-  AttributeType,
-  AttributeValueType,
-  MoneyType,
-  ProductImageType
-} from "../../";
-import { UserError } from "../../..";
 import Container from "../../../components/Container";
 import Form from "../../../components/Form";
 import PageHeader from "../../../components/PageHeader";
@@ -15,6 +8,8 @@ import SaveButtonBar, {
   SaveButtonBarState
 } from "../../../components/SaveButtonBar";
 import Toggle from "../../../components/Toggle";
+import { UserError } from "../../../types";
+import { ProductVariant } from "../../types/ProductVariant";
 import ProductVariantAttributes from "../ProductVariantAttributes";
 import ProductVariantDeleteDialog from "../ProductVariantDeleteDialog";
 import ProductVariantImages from "../ProductVariantImages";
@@ -24,46 +19,7 @@ import ProductVariantPrice from "../ProductVariantPrice";
 import ProductVariantStock from "../ProductVariantStock";
 
 interface ProductVariantPageProps {
-  variant?: {
-    id: string;
-    attributes: Array<{
-      attribute: AttributeType;
-      value: AttributeValueType;
-    }>;
-    costPrice?: MoneyType;
-    images: {
-      edges: Array<{
-        node: {
-          id: string;
-        };
-      }>;
-    };
-    name: string;
-    priceOverride?: MoneyType;
-    product: {
-      id: string;
-      images: {
-        edges: Array<{
-          node: ProductImageType;
-        }>;
-      };
-      name: string;
-      thumbnailUrl: string;
-      variants: {
-        edges: Array<{
-          node: {
-            id: string;
-            name: string;
-            sku: string;
-          };
-        }>;
-        totalCount: number;
-      };
-    };
-    sku: string;
-    quantity: number;
-    quantityAllocated: number;
-  };
+  variant?: ProductVariant;
   errors: UserError[];
   saveButtonBarState?: SaveButtonBarState;
   loading?: boolean;
@@ -192,6 +148,8 @@ const ProductVariantPage = decorate<ProductVariantPageProps>(
                               currencySymbol={
                                 variant && variant.priceOverride
                                   ? variant.priceOverride.currency
+                                  : variant && variant.costPrice
+                                  ? variant.costPrice.currency
                                   : ""
                               }
                               costPrice={data.costPrice}
@@ -250,4 +208,5 @@ const ProductVariantPage = decorate<ProductVariantPageProps>(
     );
   }
 );
+ProductVariantPage.displayName = "ProductVariantPage";
 export default ProductVariantPage;

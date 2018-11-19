@@ -1,3 +1,4 @@
+import { transformOrderStatus, transformPaymentStatus } from "../misc";
 import {
   FulfillmentStatus,
   OrderAction,
@@ -5,7 +6,6 @@ import {
   OrderStatus,
   PaymentChargeStatusEnum
 } from "../types/globalTypes";
-import { transformOrderStatus, transformPaymentStatus } from "./";
 import { OrderDetails_order } from "./types/OrderDetails";
 import { OrderList_orders_edges_node } from "./types/OrderList";
 import { UserSearch_customers_edges_node } from "./types/UserSearch";
@@ -1014,6 +1014,7 @@ export const order = (placeholder: string): OrderDetails_order => ({
 });
 export const draftOrder = (placeholder: string) => ({
   __typename: "Order" as "Order",
+  actions: [OrderAction.CAPTURE],
   availableShippingMethods: null,
   billingAddress: null,
   created: "2018-09-20T23:23:39.811428+00:00",

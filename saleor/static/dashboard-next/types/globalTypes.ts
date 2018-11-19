@@ -62,6 +62,11 @@ export enum OrderStatus {
   UNFULFILLED = "UNFULFILLED",
 }
 
+export enum OrderStatusFilter {
+  READY_TO_CAPTURE = "READY_TO_CAPTURE",
+  READY_TO_FULFILL = "READY_TO_FULFILL",
+}
+
 export enum PaymentChargeStatusEnum {
   CHARGED = "CHARGED",
   FULLY_REFUNDED = "FULLY_REFUNDED",
@@ -79,6 +84,11 @@ export enum PermissionEnum {
   MANAGE_SHIPPING = "MANAGE_SHIPPING",
   MANAGE_STAFF = "MANAGE_STAFF",
   MANAGE_USERS = "MANAGE_USERS",
+}
+
+export enum StockAvailability {
+  IN_STOCK = "IN_STOCK",
+  OUT_OF_STOCK = "OUT_OF_STOCK",
 }
 
 export enum TaxRateType {
@@ -181,11 +191,11 @@ export interface CollectionInput {
 }
 
 export interface CustomerInput {
+  defaultBillingAddress?: AddressInput | null;
+  defaultShippingAddress?: AddressInput | null;
   email?: string | null;
   isActive?: boolean | null;
   note?: string | null;
-  defaultBillingAddress?: AddressInput | null;
-  defaultShippingAddress?: AddressInput | null;
 }
 
 export interface DraftOrderInput {
@@ -286,11 +296,11 @@ export interface StaffInput {
 }
 
 export interface UserCreateInput {
+  defaultBillingAddress?: AddressInput | null;
+  defaultShippingAddress?: AddressInput | null;
   email?: string | null;
   isActive?: boolean | null;
   note?: string | null;
-  defaultBillingAddress?: AddressInput | null;
-  defaultShippingAddress?: AddressInput | null;
   sendPasswordEmail?: boolean | null;
 }
 

@@ -35,8 +35,8 @@ export interface VariantImageUnassign_variantImageUnassign_productVariant_attrib
 
 export interface VariantImageUnassign_variantImageUnassign_productVariant_attributes {
   __typename: "SelectedAttribute";
-  attribute: VariantImageUnassign_variantImageUnassign_productVariant_attributes_attribute | null;
-  value: VariantImageUnassign_variantImageUnassign_productVariant_attributes_value | null;
+  attribute: VariantImageUnassign_variantImageUnassign_productVariant_attributes_attribute;
+  value: VariantImageUnassign_variantImageUnassign_productVariant_attributes_value;
 }
 
 export interface VariantImageUnassign_variantImageUnassign_productVariant_costPrice {
@@ -131,7 +131,7 @@ export interface VariantImageUnassign_variantImageUnassign_productVariant_produc
 export interface VariantImageUnassign_variantImageUnassign_productVariant {
   __typename: "ProductVariant";
   id: string;
-  attributes: (VariantImageUnassign_variantImageUnassign_productVariant_attributes | null)[] | null;
+  attributes: VariantImageUnassign_variantImageUnassign_productVariant_attributes[];
   costPrice: VariantImageUnassign_variantImageUnassign_productVariant_costPrice | null;
   images: VariantImageUnassign_variantImageUnassign_productVariant_images | null;
   name: string;

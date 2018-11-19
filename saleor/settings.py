@@ -5,7 +5,6 @@ import dj_database_url
 import dj_email_url
 import django_cache_url
 from django.contrib.messages import constants as messages
-from django.core.exceptions import ImproperlyConfigured
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_prices.templatetags.prices_i18n import get_currency_fraction
 
@@ -368,7 +367,7 @@ bootstrap4 = {
     'form_renderers': {
         'default': 'saleor.core.utils.form_renderer.FormRenderer'}}
 
-TEST_RUNNER = ''
+TEST_RUNNER = 'tests.runner.PytestTestRunner'
 
 ALLOWED_HOSTS = get_list(
     os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1'))
@@ -382,6 +381,7 @@ AWS_MEDIA_BUCKET_NAME = os.environ.get('AWS_MEDIA_BUCKET_NAME')
 AWS_MEDIA_CUSTOM_DOMAIN = os.environ.get('AWS_MEDIA_CUSTOM_DOMAIN')
 AWS_QUERYSTRING_AUTH = get_bool_from_env('AWS_QUERYSTRING_AUTH', False)
 AWS_S3_CUSTOM_DOMAIN = os.environ.get('AWS_STATIC_CUSTOM_DOMAIN')
+AWS_S3_ENDPOINT_URL = os.environ.get('AWS_S3_ENDPOINT_URL', None)
 AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = os.environ.get('AWS_STORAGE_BUCKET_NAME')
 
@@ -401,7 +401,9 @@ VERSATILEIMAGEFIELD_RENDITION_KEY_SETS = {
         ('product_small', 'thumbnail__60x60'),
         ('product_small_2x', 'thumbnail__120x120'),
         ('product_list', 'thumbnail__255x255'),
-        ('product_list_2x', 'thumbnail__510x510')]}
+        ('product_list_2x', 'thumbnail__510x510')],
+    'background_images': [
+        ('header_image', 'thumbnail__1080x440')]}
 
 VERSATILEIMAGEFIELD_SETTINGS = {
     # Images should be pre-generated on Production environment
@@ -572,16 +574,3 @@ PAYMENT_GATEWAYS = {
         }
     }
 }
-if not DEBUG:
-    GATEWAY_PATH = '%(module)s/__init__.py'
-    for gateway, data in PAYMENT_GATEWAYS.items():
-        if gateway not in CHECKOUT_PAYMENT_GATEWAYS:
-            continue
-        if 'module' not in data or 'connection_params' not in data:
-            raise ImproperlyConfigured('Payment gateway misconfigured.')
-        module_path = {'module': data['module'].replace('.', '/')}
-        payment_gateway_file_exists = os.path.isfile(
-            GATEWAY_PATH % {'module': module_path})
-        if not payment_gateway_file_exists:
-            raise ImproperlyConfigured(
-                'No configuration files for %s payment gateway.' % gateway)

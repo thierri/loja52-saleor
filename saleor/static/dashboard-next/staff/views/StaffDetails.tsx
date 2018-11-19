@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { staffListUrl } from "..";
 import Messages from "../../components/messages";
 import Navigator from "../../components/Navigator";
+import { WindowTitle } from "../../components/WindowTitle";
 import i18n from "../../i18n";
 import { maybe } from "../../misc";
 import StaffDetailsPage from "../components/StaffDetailsPage/StaffDetailsPage";
@@ -13,6 +13,7 @@ import {
 import { TypedStaffMemberDetailsQuery } from "../queries";
 import { StaffMemberDelete } from "../types/StaffMemberDelete";
 import { StaffMemberUpdate } from "../types/StaffMemberUpdate";
+import { staffListUrl } from "../urls";
 
 interface OrderListProps {
   id: string;
@@ -52,24 +53,27 @@ export const StaffDetails: React.StatelessComponent<OrderListProps> = ({
                       onCompleted={handleStaffMemberDelete}
                     >
                       {deleteStaffMember => (
-                        <StaffDetailsPage
-                          disabled={loading}
-                          onBack={() => navigate(staffListUrl)}
-                          onDelete={deleteStaffMember}
-                          onSubmit={variables =>
-                            updateStaffMember({
-                              variables: {
-                                id,
-                                input: {
-                                  isActive: variables.isActive,
-                                  permissions: variables.permissions
+                        <>
+                          <WindowTitle title={maybe(() => data.user.email)} />
+                          <StaffDetailsPage
+                            disabled={loading}
+                            onBack={() => navigate(staffListUrl)}
+                            onDelete={deleteStaffMember}
+                            onSubmit={variables =>
+                              updateStaffMember({
+                                variables: {
+                                  id,
+                                  input: {
+                                    isActive: variables.isActive,
+                                    permissions: variables.permissions
+                                  }
                                 }
-                              }
-                            })
-                          }
-                          permissions={maybe(() => data.shop.permissions)}
-                          staffMember={maybe(() => data.user)}
-                        />
+                              })
+                            }
+                            permissions={maybe(() => data.shop.permissions)}
+                            staffMember={maybe(() => data.user)}
+                          />
+                        </>
                       )}
                     </TypedStaffMemberDeleteMutation>
                   )}
