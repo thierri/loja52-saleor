@@ -9,6 +9,7 @@ RUN \
   rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
+ADD ./loja52-django-app-0.1.tar.gz .
 RUN pip install ./loja52-django-app-0.1.tar.gz
 RUN pip install pipenv
 ADD Pipfile /app/
