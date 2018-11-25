@@ -10,7 +10,7 @@ RUN \
 
 # Install Python dependencies
 RUN ls
-ADD ./loja52-django-app-0.1.tar.gz .
+COPY ./loja52-django-app-0.1.tar.gz .
 RUN ls
 RUN pip install ./loja52-django-app-0.1.tar.gz
 RUN pip install pipenv
