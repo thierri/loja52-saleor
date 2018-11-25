@@ -10,7 +10,7 @@ RUN \
 
 # Install Python dependencies
 ARG LOJA52_DJANGO_APP_FOLDER
-RUN pip install ${LOJA52_DJANGO_APP_FOLDER}/dist/loja52-django-app-0.1.tar.gz
+RUN pip install ${LOJA52_DJANGO_APP_FOLDER}/dist/loja52djangoapp0.1.tar.gz
 RUN pip install pipenv
 ADD Pipfile /app/
 ADD Pipfile.lock /app/
