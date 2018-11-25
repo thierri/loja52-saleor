@@ -13,7 +13,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...      
-      - ls $CODEBUILD_SRC_DIR_loja52djangoapp/dist/loja52-django-app-0.1.tar.gz
+      - cp $CODEBUILD_SRC_DIR_loja52djangoapp/dist/loja52-django-app-0.1.tar.gz .
       - docker build -t $REPOSITORY_URI:latest . --build-arg LOJA52_DJANGO_APP_FOLDER=$CODEBUILD_SRC_DIR_loja52djangoapp
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
