@@ -14,6 +14,8 @@ ADD Pipfile /app/
 ADD Pipfile.lock /app/
 WORKDIR /app
 RUN pipenv install --system --deploy --dev
+ARG LOJA52_DJANGO_APP_FOLDER
+RUN pipenv install ${LOJA52_DJANGO_APP_FOLDER}/dist/loja52-django-app-0.1.tar.gz
 
 ### Build static assets
 FROM node:10 as build-nodejs
