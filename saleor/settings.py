@@ -51,9 +51,73 @@ CACHES = {'default': django_cache_url.config()}
 
 DATABASES = {
     'default': dj_database_url.config(
-        default= os.environ.get('POSTGRES_URL', 'postgres://saleor:saleor@localhost:5432/saleor'),
+        default='postgres://saleor:saleor@localhost:5432/saleor',
+        engine='tenant_schemas.postgresql_backend',
         conn_max_age=600)}
 
+DATABASE_ROUTERS = (
+    'tenant_schemas.routers.TenantSyncRouter',
+)
+
+SHARED_APPS = (
+    'tenant_schemas',  # mandatory
+    'loja52',  # you must list the app where your tenant model resides in
+)
+
+TENANT_APPS = (
+    # External apps that need to go before django's
+    'storages',
+
+    # Django modules
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.sitemaps',
+    'django.contrib.sites',
+    'django.contrib.staticfiles',
+    'django.contrib.auth',
+    'django.contrib.postgres',
+    'django.forms',
+
+    # Local apps
+    'saleor.account',
+    'saleor.discount',
+    'saleor.product',
+    'saleor.checkout',
+    'saleor.core',
+    'saleor.graphql',
+    'saleor.menu',
+    'saleor.order',
+    'saleor.dashboard',
+    'saleor.seo',
+    'saleor.shipping',
+    'saleor.search',
+    'saleor.site',
+    'saleor.data_feeds',
+    'saleor.page',
+    'saleor.payment',
+
+    # External apps
+    'versatileimagefield',
+    'django_babel',
+    'bootstrap4',
+    'django_measurement',
+    'django_prices',
+    'django_prices_openexchangerates',
+    'django_prices_vatlayer',
+    'graphene_django',
+    'mptt',
+    'webpack_loader',
+    'social_django',
+    'django_countries',
+    'django_filters',
+    'django_celery_results',
+    'impersonate',
+    'phonenumber_field',
+    'captcha'
+)
+
+TENANT_MODEL = "loja52.store"  # app.Model
 
 TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'en'
@@ -131,6 +195,7 @@ STATICFILES_FINDERS = [
 
 context_processors = [
     'django.contrib.auth.context_processors.auth',
+    'django.template.context_processors.request',
     'django.template.context_processors.debug',
     'django.template.context_processors.i18n',
     'django.template.context_processors.media',
@@ -165,6 +230,7 @@ TEMPLATES = [{
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 MIDDLEWARE = [
+    'tenant_schemas.middleware.TenantMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -187,6 +253,8 @@ MIDDLEWARE = [
 INSTALLED_APPS = [
     # External apps that need to go before django's
     'storages',
+    'tenant_schemas',  # mandatory
+    'loja52',  # you must list the app where your tenant model resides in
 
     # Django modules
     'django.contrib.contenttypes',
@@ -370,7 +438,7 @@ bootstrap4 = {
 TEST_RUNNER = 'tests.runner.PytestTestRunner'
 
 ALLOWED_HOSTS = get_list(
-    os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1'))
+    os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1,lvh.me'))
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
