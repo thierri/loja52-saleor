@@ -53,7 +53,7 @@ DATABASES = {
     'default': dj_database_url.config(
         default='postgres://saleor:saleor@localhost:5432/saleor',
         engine='tenant_schemas.postgresql_backend',
-        conn_max_age=600)}
+        conn_max_age=0)}
 
 DATABASE_ROUTERS = (
     'tenant_schemas.routers.TenantSyncRouter',
