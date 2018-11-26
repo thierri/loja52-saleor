@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "fbc36a9e882675cd29156d464d3ac82b72dc142a5f7113ddac154c79cb5ab8c6"
+            "sha256": "96b4882660c05fba4a63d1f07209fdb9d1ca9eb1e343f31d9676959bfc559704"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -1298,6 +1298,12 @@
             "index": "pypi",
             "version": "==1.24.1"
         },
+        "python-slugify": {
+            "hashes": [
+                "sha256:7723daf30996db26573176bddcdf5fcb98f66dc70df05c9cb29f2c79b8193245"
+            ],
+            "version": "==1.2.6"
+        },
         "pyyaml": {
             "hashes": [
                 "sha256:3d7da3009c0f3e783b2c873687652d83b1bbfd5c88e9813fb7e5b03c0dd3108b",
@@ -1351,6 +1357,13 @@
             "index": "pypi",
             "version": "==3.5.3"
         },
+        "transifex-client": {
+            "hashes": [
+                "sha256:fb50b37b374eeaccbee8370ed2e341531046c98e70d123a90e177f6fcb982f02"
+            ],
+            "index": "pypi",
+            "version": "==0.13.5"
+        },
         "typed-ast": {
             "hashes": [
                 "sha256:0948004fa228ae071054f5208840a1e88747a357ec1101c17217bfe99b299d58",
@@ -1379,6 +1392,13 @@
             ],
             "markers": "python_version < '3.7' and implementation_name == 'cpython'",
             "version": "==1.1.0"
+        },
+        "unidecode": {
+            "hashes": [
+                "sha256:092cdf7ad9d1052c50313426a625b717dab52f7ac58f859e09ea020953b1ad8f",
+                "sha256:8b85354be8fd0c0e10adbf0675f6dc2310e56fda43fa8fe049123b6c475e52fb"
+            ],
+            "version": "==1.0.23"
         },
         "urllib3": {
             "hashes": [
