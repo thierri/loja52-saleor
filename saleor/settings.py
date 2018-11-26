@@ -366,11 +366,11 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['console', 'mail_admins'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True},
         'django.server': {
             'handlers': ['console'],
-            'level': 'INFO',
+            'level': 'DEBUG',
             'propagate': True},
         'saleor': {
             'handlers': ['console'],
