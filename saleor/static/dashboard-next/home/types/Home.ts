@@ -58,7 +58,7 @@ export interface Home_productTopToday_edges_node_attributes_value {
 
 export interface Home_productTopToday_edges_node_attributes {
   __typename: "SelectedAttribute";
-  value: Home_productTopToday_edges_node_attributes_value | null;
+  value: Home_productTopToday_edges_node_attributes_value;
 }
 
 export interface Home_productTopToday_edges_node_product {
@@ -72,7 +72,7 @@ export interface Home_productTopToday_edges_node {
   __typename: "ProductVariant";
   id: string;
   revenue: Home_productTopToday_edges_node_revenue | null;
-  attributes: (Home_productTopToday_edges_node_attributes | null)[] | null;
+  attributes: Home_productTopToday_edges_node_attributes[];
   product: Home_productTopToday_edges_node_product;
   quantityOrdered: number | null;
 }

@@ -48,7 +48,7 @@ def test_orderline_query(
     order_data = content['data']['orders']['edges'][0]['node']
     thumbnails = [l['thumbnailUrl'] for l in order_data['lines']]
     assert len(thumbnails) == 2
-    assert None in thumbnails
+    assert thumbnails[0] is None
     assert '/static/images/placeholder540x540.png' in thumbnails[1]
 
 
@@ -78,6 +78,9 @@ def test_order_query(
                     }
                     fulfillments {
                         fulfillmentOrder
+                    }
+                    payments{
+                        id
                     }
                     subtotal {
                         net {
@@ -123,6 +126,7 @@ def test_order_query(
     fulfillment = order.fulfillments.first().fulfillment_order
     fulfillment_order = order_data['fulfillments'][0]['fulfillmentOrder']
     assert fulfillment_order == fulfillment
+    assert len(order_data['payments']) == order.payments.count()
 
     expected_methods = ShippingMethod.objects.applicable_shipping_methods(
         price=order.get_subtotal().gross.amount,
