@@ -9,10 +9,7 @@ import i18n from "../../i18n";
 import { decimal, maybe } from "../../misc";
 import ProductVariantCreatePage from "../components/ProductVariantCreatePage";
 import { TypedVariantCreateMutation } from "../mutations";
-import {
-  productVariantCreateQuery,
-  TypedProductVariantCreateQuery
-} from "../queries";
+import { TypedProductVariantCreateQuery } from "../queries";
 import { VariantCreate } from "../types/VariantCreate";
 import { productUrl, productVariantEditUrl } from "../urls";
 
@@ -41,7 +38,7 @@ export const ProductVariant: React.StatelessComponent<ProductUpdateProps> = ({
           <Messages>
             {pushMessage => (
               <TypedProductVariantCreateQuery
-                query={productVariantCreateQuery}
+                displayLoader
                 variables={{ id: productId }}
               >
                 {({ data, error, loading: productLoading }) => {

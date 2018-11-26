@@ -28,7 +28,7 @@ def test_create_token_mutation(admin_client, staff_user):
         }
     }
     """
-    variables = json.dumps({'email': staff_user.email, 'password': 'password'})
+    variables = {'email': staff_user.email, 'password': 'password'}
     response = admin_client.post(
         reverse('api'), json.dumps({'query': query, 'variables': variables}),
         content_type='application/json')
@@ -37,8 +37,7 @@ def test_create_token_mutation(admin_client, staff_user):
     assert token_data['token']
     assert not token_data['errors']
 
-    incorrect_variables = json.dumps(
-        {'email': staff_user.email, 'password': 'incorrect'})
+    incorrect_variables = {'email': staff_user.email, 'password': 'incorrect'}
     response = admin_client.post(
         reverse('api'),
         json.dumps({'query': query, 'variables': incorrect_variables}),
@@ -92,7 +91,7 @@ def test_query_user(staff_api_client, customer_user, permission_manage_users):
             isStaff
             isActive
             addresses {
-                totalCount
+                id
             }
             orders {
                 totalCount
@@ -126,7 +125,7 @@ def test_query_user(staff_api_client, customer_user, permission_manage_users):
     assert data['email'] == user.email
     assert data['isStaff'] == user.is_staff
     assert data['isActive'] == user.is_active
-    assert data['addresses']['totalCount'] == user.addresses.count()
+    assert len(data['addresses']) == user.addresses.count()
     assert data['orders']['totalCount'] == user.orders.count()
     address = data['defaultShippingAddress']
     user_address = user.default_shipping_address
