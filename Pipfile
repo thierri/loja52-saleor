@@ -57,11 +57,12 @@ raven = "==6.9.0"
 requests = ">=1.2.0"
 social-auth-app-django = ">=2.0.0"
 text-unidecode = "*"
-uwsgi = {version = ">=2.0.0", platform_system = "!= 'Windows'"}
-celery = {version = "*", extras = ["redis"]}
+uwsgi = {version = ">=2.0.0",platform_system = "!= 'Windows'"}
+celery = {version = "*",extras = ["redis"]}
 weasyprint = ">=0.42.2"
 graphene-django-optimizer = "*"
 braintree = "==3.49.0"
+django-tastypie = "*"
 
 [dev-packages]
 pytest = "*"
