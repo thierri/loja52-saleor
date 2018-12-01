@@ -3,13 +3,12 @@ import { withStyles } from "@material-ui/core/styles";
 import * as React from "react";
 
 import ActionDialog from "../../../components/ActionDialog";
+import { ConfirmButtonTransitionState } from "../../../components/ConfirmButton/ConfirmButton";
 import Container from "../../../components/Container";
 import { ControlledCheckbox } from "../../../components/ControlledCheckbox";
 import Form from "../../../components/Form";
 import PageHeader from "../../../components/PageHeader";
-import SaveButtonBar, {
-  SaveButtonBarState
-} from "../../../components/SaveButtonBar";
+import SaveButtonBar from "../../../components/SaveButtonBar";
 import Toggle from "../../../components/Toggle";
 import i18n from "../../../i18n";
 import { maybe } from "../../../misc";
@@ -46,7 +45,7 @@ export interface ProductTypeDetailsPageProps {
   defaultWeightUnit: WeightUnitsEnum;
   disabled: boolean;
   pageTitle: string;
-  saveButtonBarState: SaveButtonBarState;
+  saveButtonBarState: ConfirmButtonTransitionState;
   onAttributeAdd: (type: AttributeTypeEnum) => void;
   onAttributeDelete: (id: string, event: React.MouseEvent<any>) => void;
   onAttributeUpdate: (id: string) => void;
@@ -115,12 +114,7 @@ const ProductTypeDetailsPage = decorate<ProductTypeDetailsPageProps>(
       <Toggle>
         {(openedDeleteDialog, { toggle: toggleDeleteDialog }) => (
           <>
-            <Form
-              errors={errors}
-              initial={formInitialData}
-              onSubmit={onSubmit}
-              key={JSON.stringify(productType)}
-            >
+            <Form errors={errors} initial={formInitialData} onSubmit={onSubmit}>
               {({ change, data, hasChanged, submit }) => (
                 <Container width="md">
                   <PageHeader title={pageTitle} onBack={onBack} />

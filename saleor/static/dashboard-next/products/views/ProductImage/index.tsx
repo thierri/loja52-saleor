@@ -6,7 +6,7 @@ import ActionDialog from "../../../components/ActionDialog";
 import Messages from "../../../components/messages";
 import Navigator from "../../../components/Navigator";
 import i18n from "../../../i18n";
-import { maybe } from "../../../misc";
+import { getMutationState, maybe } from "../../../misc";
 import ProductImagePage from "../../components/ProductImagePage";
 import {
   TypedProductImageDeleteMutation,
@@ -15,7 +15,7 @@ import {
 import { TypedProductImageQuery } from "../../queries";
 import { ProductImageUpdate } from "../../types/ProductImageUpdate";
 import { productImageUrl, productUrl } from "../../urls";
-import { productImageRemoveUrl } from "./urls";
+import { productImageRemovePath, productImageRemoveUrl } from "./urls";
 
 interface ProductImageProps {
   imageId: string;
@@ -30,8 +30,7 @@ export const ProductImage: React.StatelessComponent<ProductImageProps> = ({
     {pushMessage => (
       <Navigator>
         {navigate => {
-          const handleBack = () =>
-            navigate(productUrl(encodeURIComponent(productId)));
+          const handleBack = () => navigate(productUrl(productId));
           const handleUpdateSuccess = (data: ProductImageUpdate) => {
             if (
               data.productImageUpdate &&
@@ -53,18 +52,13 @@ export const ProductImage: React.StatelessComponent<ProductImageProps> = ({
                   <TypedProductImageUpdateMutation
                     onCompleted={handleUpdateSuccess}
                   >
-                    {updateImage => (
+                    {(updateImage, updateResult) => (
                       <TypedProductImageDeleteMutation onCompleted={handleBack}>
                         {deleteImage => {
                           const handleDelete = () =>
                             deleteImage({ variables: { id: imageId } });
                           const handleImageClick = (id: string) => () =>
-                            navigate(
-                              productImageUrl(
-                                encodeURIComponent(productId),
-                                encodeURIComponent(id)
-                              )
-                            );
+                            navigate(productImageUrl(productId, id));
                           const handleUpdate = (formData: {
                             description: string;
                           }) => {
@@ -77,6 +71,14 @@ export const ProductImage: React.StatelessComponent<ProductImageProps> = ({
                           };
                           const image =
                             data && data.product && data.product.mainImage;
+
+                          const formTransitionState = getMutationState(
+                            updateResult.called,
+                            updateResult.loading,
+                            maybe(
+                              () => updateResult.data.productImageUpdate.errors
+                            )
+                          );
                           return (
                             <>
                               <ProductImagePage
@@ -86,17 +88,15 @@ export const ProductImage: React.StatelessComponent<ProductImageProps> = ({
                                 onBack={handleBack}
                                 onDelete={() =>
                                   navigate(
-                                    productImageRemoveUrl(
-                                      encodeURIComponent(productId),
-                                      encodeURIComponent(imageId)
-                                    )
+                                    productImageRemoveUrl(productId, imageId)
                                   )
                                 }
                                 onRowClick={handleImageClick}
                                 onSubmit={handleUpdate}
+                                saveButtonBarState={formTransitionState}
                               />
                               <Route
-                                path={productImageRemoveUrl(
+                                path={productImageRemovePath(
                                   ":productId",
                                   ":imageId"
                                 )}
