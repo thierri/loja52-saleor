@@ -182,6 +182,7 @@ export interface CollectionCreateInput {
   backgroundImage?: any | null;
   backgroundImageAlt?: string | null;
   seo?: SeoInput | null;
+  publishedDate?: any | null;
   products?: (string | null)[] | null;
 }
 
@@ -193,6 +194,7 @@ export interface CollectionInput {
   backgroundImage?: any | null;
   backgroundImageAlt?: string | null;
   seo?: SeoInput | null;
+  publishedDate?: any | null;
 }
 
 export interface CustomerInput {
@@ -266,6 +268,16 @@ export interface ProductTypeInput {
   isShippingRequired?: boolean | null;
   weight?: any | null;
   taxRate?: TaxRateType | null;
+}
+
+export interface ProductVariantInput {
+  attributes?: (AttributeValueInput | null)[] | null;
+  costPrice?: any | null;
+  priceOverride?: any | null;
+  sku?: string | null;
+  quantity?: number | null;
+  trackInventory?: boolean | null;
+  weight?: any | null;
 }
 
 export interface SeoInput {
