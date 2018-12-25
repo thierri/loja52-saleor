@@ -11,9 +11,9 @@ def assign_default_menus(apps, schema_editor):
     Site = apps.get_model('sites', 'Site')
     site = Site.objects.get_current()
     site_settings = site.settings
-    site_settings.top_menu = top_menu
-    site_settings.bottom_menu = bottom_menu
-    site_settings.save()
+    # site_settings.top_menu = top_menu
+    # site_settings.bottom_menu = bottom_menu
+    # site_settings.save()
 
 
 class Migration(migrations.Migration):
